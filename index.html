@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css" />
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400&display=swap"
+      rel="stylesheet"
+    />
+    <!-- JavaScript -->
+    <script defer src="app.js"></script>
+    <title class="app__title"></title>
+  </head>
+  <body>
+    <!-- App container -->
+    <div class="container">
+      <!-- Header -->
+      <header class="header">
+        <!-- App title -->
+        <h1 class="header__title">InstaWeather</h1>
+      </header>
+
+      <!-- Current date -->
+      <div class="date"></div>
+
+      <!-- Weather information -->
+      <main class="main">
+        <div class="weather__info">
+          <!-- Weather type icon -->
+          <img src="" alt="Weather icon" class="weather__info--icon" />
+          <!-- City -->
+          <div class="weather__info--city-and-type">
+            <h2 class="weather__info--city"></h2>
+            <p class="weather__info--type"></p>
+          </div>
+        </div>
+
+        <!-- Extra data for the location -->
+        <div class="extra__data">
+          <div class="extra__data--info">
+            <p class="extra__data--heading">Wind</p>
+            <p class="extra__data--wind-info"></p>
+          </div>
+          <div class="extra__data--info">
+            <p class="extra__data--heading">Feels like</p>
+            <p class="extra__data--feels-like"></p>
+          </div>
+          <div class="extra__data--info">
+            <p class="extra__data--heading">aqi</p>
+            <p class="extra__data--aqi"></p>
+          </div>
+        </div>
+      </main>
+
+      <footer class="footer">
+        <p class="footer__copyright">
+          <span class="footer__app-title">InstaWeather</span>'s current use is
+          for display on a portfolio.
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
