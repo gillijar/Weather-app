@@ -13,7 +13,6 @@ html {
 /* App container */
 .container {
   width: 100%;
-  height: 100vh;
   overflow: hidden;
 }
 
@@ -42,10 +41,9 @@ html {
 }
 
 .main {
-  /* height: 83vh; */
   opacity: 0;
   transition: 0.4s;
-  margin-bottom: 2.5vh;
+  margin-bottom: 2vh;
 }
 
 .weather__info {
