@@ -42,7 +42,7 @@ html {
 }
 
 .main {
-  height: 81vh;
+  height: 83vh;
   opacity: 0;
   transition: 0.4s;
 }
@@ -124,7 +124,6 @@ html {
 
 .footer {
   color: rgb(110, 110, 110);
-  margin-top: 2vh;
   height: 6vh;
   background-color: rgba(0, 0, 0, 0.75);
   padding: 0 3rem 0 3rem;
