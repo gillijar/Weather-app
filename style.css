@@ -42,9 +42,10 @@ html {
 }
 
 .main {
-  height: 83vh;
+  /* height: 83vh; */
   opacity: 0;
   transition: 0.4s;
+  margin-bottom: 2.5vh;
 }
 
 .weather__info {
