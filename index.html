@@ -30,29 +30,45 @@
 
       <!-- Weather information -->
       <main class="main">
-        <div class="weather__info">
-          <!-- Weather type icon -->
-          <img src="" alt="Weather icon" class="weather__info--icon" />
-          <!-- City -->
-          <div class="weather__info--city-and-type">
-            <h2 class="weather__info--city"></h2>
-            <p class="weather__info--type"></p>
+        <div class="main__current-weather">
+          <div class="weather__info">
+            <!-- Weather type icon -->
+            <img src="" alt="Weather icon" class="weather__info--icon" />
+            <!-- City -->
+            <div class="weather__info--city-and-type">
+              <h2 class="weather__info--city"></h2>
+              <p class="weather__info--type"></p>
+            </div>
+          </div>
+
+          <!-- Extra data for the location -->
+          <div class="extra__data">
+            <div class="extra__data--info">
+              <p class="extra__data--heading">Wind</p>
+              <p class="extra__data--wind-info"></p>
+            </div>
+            <div class="extra__data--info">
+              <p class="extra__data--heading">Feels like</p>
+              <p class="extra__data--feels-like"></p>
+            </div>
+            <div class="extra__data--info">
+              <p class="extra__data--heading">aqi</p>
+              <p class="extra__data--aqi"></p>
+            </div>
           </div>
         </div>
 
-        <!-- Extra data for the location -->
-        <div class="extra__data">
-          <div class="extra__data--info">
-            <p class="extra__data--heading">Wind</p>
-            <p class="extra__data--wind-info"></p>
-          </div>
-          <div class="extra__data--info">
-            <p class="extra__data--heading">Feels like</p>
-            <p class="extra__data--feels-like"></p>
-          </div>
-          <div class="extra__data--info">
-            <p class="extra__data--heading">aqi</p>
-            <p class="extra__data--aqi"></p>
+        <!-- 5 hour forecast -->
+        <div class="main__5-hour-forecast">
+          <div class="hourly__forecast">
+            <p class="hourly__forecast--heading">Next 5 hours</p>
+            <div class="hourly__forecast--data-container">
+              <div class="hourly__forecast--data hourly__forecast--1"></div>
+              <div class="hourly__forecast--data hourly__forecast--2"></div>
+              <div class="hourly__forecast--data hourly__forecast--3"></div>
+              <div class="hourly__forecast--data hourly__forecast--4"></div>
+              <div class="hourly__forecast--data hourly__forecast--5"></div>
+            </div>
           </div>
         </div>
       </main>

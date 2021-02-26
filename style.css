@@ -43,7 +43,8 @@ html {
 .main {
   opacity: 0;
   transition: 0.4s;
-  margin-bottom: 2vh;
+  margin-bottom: 0.5rem;
+  width: 100%;
 }
 
 .weather__info {
@@ -90,6 +91,7 @@ html {
 /* Extra data styling */
 .extra__data {
   border-top: 1px solid white;
+  border-bottom: 1px solid white;
   width: 92.5%;
   margin: 0 auto;
   display: flex;
@@ -97,8 +99,8 @@ html {
 }
 
 .extra__data--info {
-  margin-top: 0.5rem;
-  padding: 1.25rem;
+  margin: 0.5rem 0;
+  padding: 1.25rem 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -121,11 +123,45 @@ html {
   display: flex;
 }
 
+.main__5-hour-forecast {
+  text-align: center;
+  width: 92.5%;
+  margin: 0 auto;
+}
+
+.hourly__forecast--heading {
+  font-size: 2rem;
+  font-weight: 300;
+  padding: 1.5rem;
+  text-transform: uppercase;
+}
+
+.hourly__forecast--data-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid white;
+}
+
+.hourly__forecast--data {
+  margin-top: 0.5rem;
+  width: 19%;
+  padding: 1rem;
+}
+
+.hourly__forecast--data:not(:last-child) {
+  border-right: 1px solid white;
+}
+
+.hourly__forecast--icon {
+  width: 70%;
+}
+
 .footer {
   color: rgb(110, 110, 110);
   height: 6vh;
   background-color: rgba(0, 0, 0, 0.75);
-  padding: 0 3rem 0 3rem;
+  padding: 0 3rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -153,6 +189,7 @@ html {
     rgb(172, 217, 255),
     rgb(64, 169, 255)
   );
+  overflow-x: hidden;
 }
 
 .night-background {
@@ -167,4 +204,5 @@ html {
     rgb(9, 43, 97),
     rgb(32, 49, 78)
   );
+  overflow-x: hidden;
 }
