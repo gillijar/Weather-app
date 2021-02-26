@@ -125,7 +125,7 @@ html {
 
 .main__5-hour-forecast {
   text-align: center;
-  width: 92.5%;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -145,8 +145,14 @@ html {
 
 .hourly__forecast--data {
   margin-top: 0.5rem;
-  width: 19%;
+  width: 20%;
   padding: 1rem;
+}
+
+.hourly__forecast--date {
+  font-size: 1.4rem;
+  padding: 0.5rem;
+  font-weight: 200;
 }
 
 .hourly__forecast--data:not(:last-child) {
