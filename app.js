@@ -61,8 +61,9 @@ navigator.geolocation.getCurrentPosition((position) => {
 
         // Display weather type icon
         weatherIconDisplay.src = `https://www.weatherbit.io/static/img/icons/${weatherIcon}.png`;
-        weatherIconDisplay.addEventListener('load', () =>
-          weatherIconDisplay.classList.add('view')
+        weatherIconDisplay.addEventListener(
+          'load',
+          () => (weatherIconDisplay.style.opacity = 1)
         );
 
         // Inserts tempHTML to the end of the weather info container
@@ -97,6 +98,7 @@ navigator.geolocation.getCurrentPosition((position) => {
           const futureHours = function (hour) {
             if (hour > 12) return `${(hour %= 12)} PM`;
             else if (hour == 12) return `${hour} PM`;
+            else if (hour == 0) return `12 AM`;
             else return `${hour} AM`;
           };
 
@@ -121,6 +123,9 @@ navigator.geolocation.getCurrentPosition((position) => {
             // Adding 1 to i and hour
             i++;
             hour++;
+
+            // Resetting hour to 0 when it is greater than 23
+            if (hour > 23) hour = 0;
           });
         })
         .catch((err) => console.error(`${err.message}`))
@@ -128,5 +133,3 @@ navigator.geolocation.getCurrentPosition((position) => {
     }
   );
 });
-
-// 3. Set up manual errors and display a error response and try again button on screen
