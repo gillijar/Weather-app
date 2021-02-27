@@ -10,6 +10,15 @@ html {
   font-size: 62.5%; /* 1 rem is equal to 10px // 10 / 16 = 62.5 */
 }
 
+body {
+  width: 100vw;
+  font-size: 1.6rem;
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.6;
+  color: white;
+  overflow-x: hidden;
+}
+
 /* App container */
 .container {
   width: 100%;
@@ -27,9 +36,8 @@ html {
 }
 
 .header__title {
-  letter-spacing: 0.3rem;
   font-weight: 300;
-  letter-spacing: 0.3rem;
+  letter-spacing: 0.15rem;
 }
 
 .date {
@@ -69,7 +77,6 @@ html {
 .weather__info--city {
   font-size: 3.5rem;
   font-weight: 300;
-  letter-spacing: 0.15rem;
 }
 
 .weather__info--type {
@@ -138,14 +145,15 @@ html {
 
 .hourly__forecast--data-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   border-top: 1px solid white;
+  overflow: scroll;
 }
 
 .hourly__forecast--data {
   margin-top: 0.5rem;
-  width: 20%;
+  flex: 0 0 19%;
   padding: 1rem;
 }
 
@@ -178,37 +186,30 @@ html {
   color: white;
 }
 
+/* Remove scroll bar */
+::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+  background: transparent;
+}
+
 /* JavaScript classes */
 .view-main {
   opacity: 1;
 }
 
 .day-background {
-  width: 100vw;
-  font-size: 1.6rem;
-  font-family: 'Poppins', sans-serif;
-  /* color: white; */
-  line-height: 1.6;
-  color: white;
   background-image: linear-gradient(
     to top right,
     rgb(172, 217, 255),
     rgb(64, 169, 255)
   );
-  overflow-x: hidden;
 }
 
 .night-background {
-  width: 100vw;
-  font-size: 1.6rem;
-  font-family: 'Poppins', sans-serif;
-  /* color: white; */
-  line-height: 1.6;
-  color: white;
   background-image: linear-gradient(
     to top right,
     rgb(9, 43, 97),
     rgb(32, 49, 78)
   );
-  overflow-x: hidden;
 }
