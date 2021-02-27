@@ -97,8 +97,8 @@ body {
 
 /* Extra data styling */
 .extra__data {
-  border-top: 1px solid white;
-  border-bottom: 1px solid white;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   width: 92.5%;
   margin: 0 auto;
   display: flex;
@@ -116,7 +116,7 @@ body {
 }
 
 .extra__data--info:not(:last-child) {
-  border-right: 1px solid white;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .extra__data--heading {
@@ -147,7 +147,7 @@ body {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  border-top: 1px solid white;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
   overflow: scroll;
 }
 
@@ -164,7 +164,7 @@ body {
 }
 
 .hourly__forecast--data:not(:last-child) {
-  border-right: 1px solid white;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .hourly__forecast--icon {
@@ -175,11 +175,11 @@ body {
   color: rgb(110, 110, 110);
   height: 6vh;
   background-color: rgba(0, 0, 0, 0.75);
-  padding: 0 3rem;
+  padding: 0.75rem 3rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 .footer__app-title {
