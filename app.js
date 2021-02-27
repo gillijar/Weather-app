@@ -84,7 +84,9 @@ navigator.geolocation.getCurrentPosition((position) => {
         feelsLikeDisplay.textContent = `${Math.round(cityData.app_temp)}°F`;
         title.textContent = `InstaWeather | ${cityName}, ${stateName}`;
         typeDisplay.textContent = cityData.weather.description;
-        windInfoDisplay.textContent = `${cityData.wind_cdir} ${cityData.wind_spd} mph`;
+        windInfoDisplay.textContent = `${cityData.wind_cdir} ${Math.round(
+          cityData.wind_spd
+        )} mph`;
       });
       // Fetching hourly data
       getJSON(
