@@ -47,8 +47,12 @@ navigator.geolocation.getCurrentPosition((position) => {
   // Get city info from geocode reverse geocode API
   getJSON(`https://geocode.xyz/${latitude},${longitude}?geoit=json`).then(
     (data) => {
-      const cityName =
-        data.city[0].toUpperCase() + data.city.slice(1).toLowerCase();
+      const cityName = data.city
+        .toLowerCase()
+        .split(' ')
+        .map((name) => name[0].toUpperCase() + name.slice(1))
+        .join(' ');
+
       const stateName = data.statename;
 
       //   Get weather for current geocodes
@@ -56,7 +60,9 @@ navigator.geolocation.getCurrentPosition((position) => {
         `https://api.weatherbit.io/v2.0/current?lat=${latitude}&lon=${longitude}&key=${APIKey}&include=minutely&units=I`
       ).then((data) => {
         const cityData = data.data[0];
-        const tempHTML = `<p class="weather__info--temp">${cityData.temp}<span class="degrees">°F</span></p>`;
+        const tempHTML = `<p class="weather__info--temp">${Math.round(
+          cityData.temp
+        )}<span class="degrees">°F</span></p>`;
         const weatherIcon = cityData.weather.icon;
 
         // Display weather type icon
@@ -99,8 +105,8 @@ navigator.geolocation.getCurrentPosition((position) => {
           // Function to decide whether forecast should display AM or PM
           const futureHours = function (hour) {
             if (hour > 12) return `${(hour %= 12)} PM`;
-            else if (hour == 12) return `${hour} PM`;
-            else if (hour == 0) return `12 AM`;
+            else if (hour === 0) return `12 AM`;
+            else if (hour === 12) return `${hour} PM`;
             else return `${hour} AM`;
           };
 
@@ -109,15 +115,27 @@ navigator.geolocation.getCurrentPosition((position) => {
 
           // Iterating through each box and displaying data for that hour
           hourlyForecastData.forEach((box) => {
+            // Resetting hour to 0 when it is greater than 23
+            if (hour > 23) hour = 0;
+
             const hourlyData = data.data[i];
             const icon = hourlyData.weather.icon;
             const hourlyIcon = `https://www.weatherbit.io/static/img/icons/${icon}.png`;
             const hourlyString = `
-            <div class="hourly__forecast--date">${futureHours(hour)}</div>
-            <img src="${hourlyIcon}" alt="Hourly icon" class="hourly__forecast--icon" />
-            <div class="hourly__forecast--temp">${Math.round(
-              hourlyData.temp
-            )}°F</div>`;
+            <div class="hourly__forecast--main">
+              <div class="hourly__forecast--date">${futureHours(hour)}</div>
+              <img src="${hourlyIcon}" alt="Hourly icon" class="hourly__forecast--icon" />
+              <div class="hourly__forecast--temp">${Math.round(
+                hourlyData.temp
+              )}°F</div>
+            </div>
+            <div class="hourly__forecast--type">${
+              hourlyData.weather.description
+            }</div>
+            <div class="hourly__forecast--precipitation">Chance of rain: ${Math.round(
+              hourlyData.precip
+            )}%</div>
+            `;
 
             // Inserting html into each box
             box.insertAdjacentHTML('afterbegin', hourlyString);
@@ -125,9 +143,6 @@ navigator.geolocation.getCurrentPosition((position) => {
             // Adding 1 to i and hour
             i++;
             hour++;
-
-            // Resetting hour to 0 when it is greater than 23
-            if (hour > 23) hour = 0;
           });
         })
         .catch((err) => console.error(`${err.message}`))
