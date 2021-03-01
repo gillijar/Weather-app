@@ -75,8 +75,9 @@ body {
 }
 
 .weather__info--city {
-  font-size: 3.5rem;
+  font-size: 3rem;
   font-weight: 300;
+  padding-bottom: 0.5rem;
 }
 
 .weather__info--type {
@@ -171,6 +172,14 @@ body {
   width: 70%;
 }
 
+.hourly__forecast--type {
+  display: none;
+}
+
+.hourly__forecast--precipitation {
+  display: none;
+}
+
 .footer {
   color: rgb(110, 110, 110);
   height: 6vh;
@@ -212,4 +221,76 @@ body {
     rgb(9, 43, 97),
     rgb(32, 49, 78)
   );
+}
+
+/* Media Queries */
+@media only screen and (min-width: 1100px) {
+  .main {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .weather__info--icon {
+    width: 40%;
+  }
+
+  .main__current-weather {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 0 0 40%;
+  }
+
+  .main__5-hour-forecast {
+    margin-top: 0.5rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .hourly__forecast--data-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hourly__forecast--data {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .hourly__forecast--data:not(:last-child) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-right: none;
+  }
+
+  .hourly__forecast--main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 30%;
+  }
+
+  .hourly__forecast--temp {
+    margin-left: -6rem;
+  }
+
+  .hourly__forecast--icon {
+    width: 20%;
+  }
+
+  .hourly__forecast--type {
+    display: inline-block;
+    font-weight: 300;
+  }
+
+  .hourly__forecast--precipitation {
+    display: inline-block;
+    font-weight: 300;
+  }
+}
+
+@media only screen and (min-width: 736px) {
+  .weather__info--icon {
+    width: 30%;
+  }
 }
