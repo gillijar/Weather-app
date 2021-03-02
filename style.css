@@ -49,6 +49,7 @@ body {
 }
 
 .main {
+  min-height: 83vh;
   opacity: 0;
   transition: 0.4s;
   margin-bottom: 0.5rem;
@@ -197,7 +198,7 @@ body {
 
 .error {
   position: absolute;
-  top: 40%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
