@@ -195,6 +195,37 @@ body {
   color: white;
 }
 
+.error {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.error__msg {
+  color: black;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.error__btn {
+  padding: 1rem 2rem;
+  font-size: 1.6rem;
+  border: 2px solid #999;
+  border-radius: 100px;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.3s;
+}
+
+.error__btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0.8rem 3rem rgba(0, 0, 0, 0.1);
+}
+
 /* Remove scroll bar */
 ::-webkit-scrollbar {
   height: 0;

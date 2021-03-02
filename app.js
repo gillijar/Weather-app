@@ -7,6 +7,8 @@ const body = document.querySelector('body');
 const cityDisplay = document.querySelector('.weather__info--city');
 const date = new Date();
 const dateDisplay = document.querySelector('.date');
+const error = document.querySelector('.error');
+const errorBtn = document.querySelector('.error__btn');
 const feelsLikeDisplay = document.querySelector('.extra__data--feels-like');
 const hourlyForecastData = document.querySelectorAll('.hourly__forecast--data');
 const mainContent = document.querySelector('.main');
@@ -27,6 +29,16 @@ const getJSON = function (url) {
   });
 };
 
+// Render error in case of rejected promise
+const renderError = function (msg) {
+  const errorMsg = document.querySelector('.error__msg');
+  errorMsg.textContent = msg;
+  error.style.opacity = 1;
+  error.style.pointerEvents = 'all';
+};
+
+errorBtn.addEventListener('click', () => location.reload());
+
 // Date function for header
 const displayDate = (function (date) {
   const currentDate = new Intl.DateTimeFormat('en-US', {
@@ -45,8 +57,8 @@ navigator.geolocation.getCurrentPosition((position) => {
   const { longitude } = position.coords;
 
   // Get city info from geocode reverse geocode API
-  getJSON(`https://geocode.xyz/${latitude},${longitude}?geoit=json`).then(
-    (data) => {
+  getJSON(`https://geocode.xyz/${latitude},${longitude}?geoit=json`)
+    .then((data) => {
       const cityName = data.city
         .toLowerCase()
         .split(' ')
@@ -97,31 +109,30 @@ navigator.geolocation.getCurrentPosition((position) => {
       // Fetching hourly data
       getJSON(
         `https://api.weatherbit.io/v2.0/forecast/hourly?lat=${latitude}&lon=${longitude}&key=${APIKey}&hours=48&units=I`
-      )
-        .then((data) => {
-          // Hour for boxes
-          let hour = date.getHours() + 1;
+      ).then((data) => {
+        // Hour for boxes
+        let hour = date.getHours() + 1;
 
-          // Function to decide whether forecast should display AM or PM
-          const futureHours = function (hour) {
-            if (hour > 12) return `${(hour %= 12)} PM`;
-            else if (hour === 0) return `12 AM`;
-            else if (hour === 12) return `${hour} PM`;
-            else return `${hour} AM`;
-          };
+        // Function to decide whether forecast should display AM or PM
+        const futureHours = function (hour) {
+          if (hour > 12) return `${(hour %= 12)} PM`;
+          else if (hour === 0) return `12 AM`;
+          else if (hour === 12) return `${hour} PM`;
+          else return `${hour} AM`;
+        };
 
-          // Iterator for each box
-          let i = 0;
+        // Iterator for each box
+        let i = 0;
 
-          // Iterating through each box and displaying data for that hour
-          hourlyForecastData.forEach((box) => {
-            // Resetting hour to 0 when it is greater than 23
-            if (hour > 23) hour = 0;
+        // Iterating through each box and displaying data for that hour
+        hourlyForecastData.forEach((box) => {
+          // Resetting hour to 0 when it is greater than 23
+          if (hour > 23) hour = 0;
 
-            const hourlyData = data.data[i];
-            const icon = hourlyData.weather.icon;
-            const hourlyIcon = `https://www.weatherbit.io/static/img/icons/${icon}.png`;
-            const hourlyString = `
+          const hourlyData = data.data[i];
+          const icon = hourlyData.weather.icon;
+          const hourlyIcon = `https://www.weatherbit.io/static/img/icons/${icon}.png`;
+          const hourlyString = `
             <div class="hourly__forecast--main">
               <div class="hourly__forecast--date">${futureHours(hour)}</div>
               <img src="${hourlyIcon}" alt="Hourly icon" class="hourly__forecast--icon" />
@@ -137,16 +148,17 @@ navigator.geolocation.getCurrentPosition((position) => {
             )}%</div>
             `;
 
-            // Inserting html into each box
-            box.insertAdjacentHTML('afterbegin', hourlyString);
+          // Inserting html into each box
+          box.insertAdjacentHTML('afterbegin', hourlyString);
 
-            // Adding 1 to i and hour
-            i++;
-            hour++;
-          });
-        })
-        .catch((err) => console.error(`${err.message}`))
-        .finally(() => mainContent.classList.add('view-main'));
-    }
-  );
+          // Adding 1 to i and hour
+          i++;
+          hour++;
+        });
+      });
+    })
+    .catch((err) => {
+      renderError(`${err.message}`);
+    })
+    .finally(() => mainContent.classList.add('view-main'));
 });
