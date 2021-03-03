@@ -37,6 +37,7 @@ const renderError = function (msg) {
   error.style.pointerEvents = 'all';
 };
 
+// Button to reload page in case of an error
 errorBtn.addEventListener('click', () => location.reload());
 
 // Date function for header
@@ -135,10 +136,12 @@ navigator.geolocation.getCurrentPosition((position) => {
           const hourlyString = `
             <div class="hourly__forecast--main">
               <div class="hourly__forecast--date">${futureHours(hour)}</div>
-              <img src="${hourlyIcon}" alt="Hourly icon" class="hourly__forecast--icon" />
-              <div class="hourly__forecast--temp">${Math.round(
-                hourlyData.temp
-              )}°F</div>
+                <div class="hourly__forecast--icon-temp">
+                  <img src="${hourlyIcon}" alt="Hourly icon" class="hourly__forecast--icon" />
+                  <div class="hourly__forecast--temp">${Math.round(
+                    hourlyData.temp
+                  )}°F</div>
+              </div>
             </div>
             <div class="hourly__forecast--type">${
               hourlyData.weather.description

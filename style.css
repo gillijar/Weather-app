@@ -132,7 +132,7 @@ body {
   display: flex;
 }
 
-.main__5-hour-forecast {
+.main__24-hour-forecast {
   text-align: center;
   width: 100%;
   margin: 0 auto;
@@ -273,9 +273,11 @@ body {
     flex: 0 0 40%;
   }
 
-  .main__5-hour-forecast {
+  .main__24-hour-forecast {
     margin-top: 0.5rem;
+    max-height: 83vh;
     border-left: 1px solid rgba(255, 255, 255, 0.2);
+    overflow: scroll;
   }
 
   .hourly__forecast--data-container {
@@ -302,12 +304,19 @@ body {
     width: 30%;
   }
 
-  .hourly__forecast--temp {
-    margin-left: -6rem;
+  .hourly__forecast--icon-temp {
+    width: 60%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
   }
 
   .hourly__forecast--icon {
-    width: 20%;
+    width: 30%;
+  }
+
+  .hourly__forecast--temp {
+    width: 45%;
   }
 
   .hourly__forecast--type {
@@ -318,6 +327,10 @@ body {
   .hourly__forecast--precipitation {
     display: inline-block;
     font-weight: 300;
+  }
+
+  .footer {
+    font-size: 1.2rem;
   }
 }
 
