@@ -324,7 +324,7 @@ body {
     font-weight: 300;
   }
 
-  .hourly__forecast--precipitation {
+  .hourly__forecast--humidity {
     display: inline-block;
     font-weight: 300;
   }
