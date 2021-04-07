@@ -2,7 +2,8 @@
 
 // Variables
 const airQualityDisplay = document.querySelector('.extra__data--aqi');
-const APIKey = '22f6a7dec6e04ee5a4ee2ce9eedcdd79';
+const APIKey = '135a94105a0042b5a55fb5628dcfb302';
+const APIKey2 = 'a33df676f47b9be9a8072c268d067eb3';
 const body = document.querySelector('body');
 const cityDisplay = document.querySelector('.weather__info--city');
 const date = new Date();
@@ -37,6 +38,15 @@ const renderError = function (msg) {
   error.style.pointerEvents = 'all';
 };
 
+// Takes a word or words and makes the first letter of each uppercase
+const toUppercase = function (word) {
+  return word
+    .toLowerCase()
+    .split(' ')
+    .map((name) => name[0].toUpperCase() + name.slice(1))
+    .join(' ');
+};
+
 // Button to reload page in case of an error
 errorBtn.addEventListener('click', () => location.reload());
 
@@ -60,12 +70,7 @@ navigator.geolocation.getCurrentPosition((position) => {
   // Get city info from geocode reverse geocode API
   getJSON(`https://geocode.xyz/${latitude},${longitude}?geoit=json`)
     .then((data) => {
-      const cityName = data.city
-        .toLowerCase()
-        .split(' ')
-        .map((name) => name[0].toUpperCase() + name.slice(1))
-        .join(' ');
-
+      const cityName = toUppercase(data.city);
       const stateName = data.statename;
 
       //   Get weather for current geocodes
@@ -109,7 +114,7 @@ navigator.geolocation.getCurrentPosition((position) => {
       });
       // Fetching hourly data
       getJSON(
-        `https://api.weatherbit.io/v2.0/forecast/hourly?lat=${latitude}&lon=${longitude}&key=${APIKey}&hours=48&units=I`
+        `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${APIKey2}&units=imperial`
       ).then((data) => {
         // Hour for boxes
         let hour = date.getHours() + 1;
@@ -130,9 +135,27 @@ navigator.geolocation.getCurrentPosition((position) => {
           // Resetting hour to 0 when it is greater than 23
           if (hour > 23) hour = 0;
 
-          const hourlyData = data.data[i];
-          const icon = hourlyData.weather.icon;
-          const hourlyIcon = `https://www.weatherbit.io/static/img/icons/${icon}.png`;
+          const hourlyData = data.hourly[i];
+          const icon = hourlyData.weather[0].icon;
+          const description = hourlyData.weather[0].description;
+          let hourlyIcon;
+
+          if (
+            description.includes('scattered') ||
+            description.includes('clear') ||
+            description.includes('few') ||
+            description.includes('broken') ||
+            description.includes('overcast')
+          ) {
+            hourlyIcon = `https://www.weatherbit.io/static/img/icons/c${icon}.png`;
+          } else if (description.includes('rain')) {
+            hourlyIcon = `https://www.weatherbit.io/static/img/icons/r02d.png`;
+          } else if (description.includes('thunderstorm')) {
+            hourlyIcon = `https://www.weatherbit.io/static/img/icons/t04d.png`;
+          } else {
+            hourlyIcon = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+          }
+
           const hourlyString = `
             <div class="hourly__forecast--main">
               <div class="hourly__forecast--date">${futureHours(hour)}</div>
@@ -143,11 +166,11 @@ navigator.geolocation.getCurrentPosition((position) => {
                   )}°F</div>
               </div>
             </div>
-            <div class="hourly__forecast--type">${
-              hourlyData.weather.description
-            }</div>
-            <div class="hourly__forecast--precipitation">Chance of rain: ${Math.round(
-              hourlyData.precip
+            <div class="hourly__forecast--type">${toUppercase(
+              description
+            )}</div>
+            <div class="hourly__forecast--humidity">Humidity: ${Math.round(
+              hourlyData.humidity
             )}%</div>
             `;
 
