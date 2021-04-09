@@ -14,6 +14,21 @@
     />
     <!-- JavaScript -->
     <script defer src="app.js"></script>
+
+    <!-- Google maps API -->
+    <script
+      async
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnLrO4H_GVRxEXQed8sC2Mx0MSjVovZ64&libraries=places&callback=activatePlacesSearch"
+    ></script>
+
+    <!-- Font awesome cdn -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+      crossorigin="anonymous"
+    />
+
     <title class="app__title"></title>
   </head>
   <body>
@@ -23,6 +38,9 @@
       <header class="header">
         <!-- App title -->
         <h1 class="header__title">InstaWeather</h1>
+        <button class="header__nav">
+          <i class="fas fa-plus-circle"></i>
+        </button>
       </header>
 
       <!-- Current date -->
@@ -30,66 +48,7 @@
 
       <!-- Weather information -->
       <main class="main">
-        <div class="main__current-weather">
-          <div class="weather__info">
-            <!-- Weather type icon -->
-            <img src="" alt="Weather icon" class="weather__info--icon" />
-            <!-- City -->
-            <div class="weather__info--city-and-type">
-              <h2 class="weather__info--city"></h2>
-              <p class="weather__info--type"></p>
-            </div>
-          </div>
-
-          <!-- Extra data for the location -->
-          <div class="extra__data">
-            <div class="extra__data--info">
-              <p class="extra__data--heading">Wind</p>
-              <p class="extra__data--wind-info"></p>
-            </div>
-            <div class="extra__data--info">
-              <p class="extra__data--heading">Feels like</p>
-              <p class="extra__data--feels-like"></p>
-            </div>
-            <div class="extra__data--info">
-              <p class="extra__data--heading">aqi</p>
-              <p class="extra__data--aqi"></p>
-            </div>
-          </div>
-        </div>
-
-        <!-- 5 hour forecast -->
-        <div class="main__24-hour-forecast">
-          <div class="hourly__forecast">
-            <p class="hourly__forecast--heading">Hourly forecast</p>
-            <div class="hourly__forecast--data-container">
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-              <div class="hourly__forecast--data"></div>
-            </div>
-          </div>
-        </div>
+        <!-- JavaScript HTML insert -->
       </main>
 
       <!-- Footer -->
@@ -106,5 +65,13 @@
         <button class="error__btn">Reload page</button>
       </div>
     </div>
+
+    <!-- Nav search bar -->
+    <nav class="search">
+      <div class="search-bar__container">
+        <input type="text" class="search__city" />
+        <button class="search__city-btn">test</button>
+      </div>
+    </nav>
   </body>
 </html>

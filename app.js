@@ -6,13 +6,21 @@ const APIKey = '135a94105a0042b5a55fb5628dcfb302';
 const APIKey2 = 'a33df676f47b9be9a8072c268d067eb3';
 const body = document.querySelector('body');
 const cityDisplay = document.querySelector('.weather__info--city');
+let cityName;
 const date = new Date();
 const dateDisplay = document.querySelector('.date');
 const error = document.querySelector('.error');
 const errorBtn = document.querySelector('.error__btn');
 const feelsLikeDisplay = document.querySelector('.extra__data--feels-like');
 const hourlyForecastData = document.querySelectorAll('.hourly__forecast--data');
+const input = document.querySelector('.search__city');
+let latitude;
+let longitude;
 const mainContent = document.querySelector('.main');
+const search = document.querySelector('.search');
+const searchBtn = document.querySelector('.search__city-btn');
+const searchNavBtn = document.querySelector('.header__nav');
+let stateName;
 const tempDisplay = document.querySelector('.weather__info--temp');
 const title = document.querySelector('.app__title');
 const typeDisplay = document.querySelector('.weather__info--type');
@@ -28,6 +36,152 @@ const getJSON = function (url) {
     }
     return res.json();
   });
+};
+
+const getWeatherData = function (url1, url2) {
+  const displayData = function () {
+    // Get current weather data
+    getJSON(url1).then((data) => {
+      const cityData = data.data[0];
+      const weatherIcon = cityData.weather.icon;
+
+      // Change background color depending on time of day
+      if (cityData.pod == 'd') {
+        body.classList.remove('night-background');
+        body.classList.add('day-background');
+      } else if (cityData.pod == 'n') {
+        body.classList.remove('day-background');
+        body.classList.add('night-background');
+      }
+
+      title.textContent = `InstaWeather | ${cityName}, ${stateName}`;
+
+      function insertCurrentWeather() {
+        const mainHTML = `<div class="main__city-container">
+        <div class="main__current-weather">
+          <div class="weather__info">
+            <!-- Weather type icon -->
+            <img src="${`https://www.weatherbit.io/static/img/icons/${weatherIcon}.png`}" alt="Weather icon" class="weather__info--icon" />
+            <!-- City -->
+            <div class="weather__info--city-and-type">
+            <h2 class="weather__info--city">${cityName}</h2>
+            <p class="weather__info--type">${cityData.weather.description}</p>
+            </div>
+            <p class="weather__info--temp">${Math.round(
+              cityData.temp
+            )}<span class="degrees">°F</span></p>
+          </div>
+
+          <!-- Extra data for the location -->
+          <div class="extra__data">
+            <div class="extra__data--info">
+              <p class="extra__data--heading">Wind</p>
+              <p class="extra__data--wind-info">${
+                cityData.wind_cdir
+              } ${Math.round(cityData.wind_spd)} mph</p>
+            </div>
+            <div class="extra__data--info">
+              <p class="extra__data--heading">Feels like</p>
+              <p class="extra__data--feels-like">${`${Math.round(
+                cityData.app_temp
+              )}°F`}</p>
+            </div>
+            <div class="extra__data--info">
+              <p class="extra__data--heading">aqi</p>
+              <p class="extra__data--aqi">${cityData.aqi}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5 hour forecast -->
+        <div class="main__24-hour-forecast">
+          <div class="hourly__forecast">
+            <p class="hourly__forecast--heading">Hourly forecast</p>
+            <div class="hourly__forecast--data-container"></div>
+          </div>
+        </div>
+      </div>
+      `;
+        mainContent.insertAdjacentHTML('beforeend', mainHTML);
+      }
+      insertCurrentWeather();
+    });
+    getJSON(url2).then((data) => {
+      console.log(data);
+      const hourlyForecastDataContainer = document.querySelector(
+        '.hourly__forecast--data-container'
+      );
+
+      // Hour for boxes
+      let hour = date.getHours() + 1;
+
+      // Function to decide whether forecast should display AM or PM
+      const futureHours = function (hour) {
+        if (hour > 12) return `${(hour %= 12)} PM`;
+        else if (hour === 0) return `12 AM`;
+        else if (hour === 12) return `${hour} PM`;
+        else return `${hour} AM`;
+      };
+
+      // Iterating through each box and displaying data for that hour
+      for (let i = 0; i < 24; i++) {
+        // Resetting hour to 0 when it is greater than 23
+        if (hour > 23) hour = 0;
+
+        const hourlyData = data.hourly[i];
+        const icon = hourlyData.weather[0].icon;
+        const description = hourlyData.weather[0].description;
+        let hourlyIcon;
+
+        if (
+          description.includes('scattered') ||
+          description.includes('clear') ||
+          description.includes('few') ||
+          description.includes('broken') ||
+          description.includes('overcast')
+        ) {
+          hourlyIcon = `https://www.weatherbit.io/static/img/icons/c${icon}.png`;
+        } else if (description.includes('rain')) {
+          hourlyIcon = `https://www.weatherbit.io/static/img/icons/r02d.png`;
+        } else if (description.includes('thunderstorm')) {
+          hourlyIcon = `https://www.weatherbit.io/static/img/icons/t04d.png`;
+        } else {
+          hourlyIcon = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+        }
+
+        const hourlyString = `
+        <div class="hourly__forecast--data">
+        <div class="hourly__forecast--main">
+          <div class="hourly__forecast--date">${futureHours(hour)}</div>
+          <div class="hourly__forecast--icon-temp">
+            <img
+              src="${hourlyIcon}"
+              alt="Hourly icon"
+              class="hourly__forecast--icon"
+            />
+            <div class="hourly__forecast--temp">${Math.round(
+              hourlyData.temp
+            )}°F</div>
+          </div>
+        </div>
+        <div class="hourly__forecast--type">${toUppercase(description)}</div>
+        <div class="hourly__forecast--humidity">
+          Humidity: ${Math.round(hourlyData.humidity)}%
+        </div>
+      </div>
+      `;
+
+        hourlyForecastDataContainer.insertAdjacentHTML(
+          'beforeend',
+          hourlyString
+        );
+
+        // Adding 1 to hour
+        hour++;
+      }
+    });
+  };
+  displayData();
 };
 
 // Render error in case of rejected promise
@@ -62,129 +216,65 @@ const displayDate = (function (date) {
   // Immediately invoking the function
 })(date);
 
+// Autocomplete input function
+function activatePlacesSearch() {
+  const autocomplete = new google.maps.places.Autocomplete(input);
+}
+
 // Get location and display current weather
 navigator.geolocation.getCurrentPosition((position) => {
-  const { latitude } = position.coords;
-  const { longitude } = position.coords;
+  latitude = position.coords.latitude;
+  longitude = position.coords.longitude;
 
   // Get city info from geocode reverse geocode API
   getJSON(`https://geocode.xyz/${latitude},${longitude}?geoit=json`)
     .then((data) => {
-      const cityName = toUppercase(data.city);
-      const stateName = data.statename;
+      cityName = toUppercase(data.city);
+      stateName = data.statename;
+
+      getWeatherData(
+        `https://api.weatherbit.io/v2.0/current?lat=${latitude}&lon=${longitude}&key=${APIKey}&include=minutely&units=I`,
+        `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${APIKey2}&units=imperial`
+      );
+    })
+    .catch((err) => {
+      renderError(`${err.message}`);
+    })
+    .finally(() => {
+      mainContent.classList.add('view-main');
+    });
+});
+
+// Get searched input location
+searchBtn.addEventListener('click', function () {
+  console.log(input.value.split(',')[0]);
+
+  cityName = input.value.split(',')[0];
+  stateName = input.value.split(',')[1];
+
+  // Forward geocoding search input
+  getJSON(`https://geocode.xyz/${cityName},${stateName},USA?json=1`)
+    .then((data) => {
+      latitude = data.latt;
+      longitude = data.longt;
+
+      // call function here
 
       //   Get weather for current geocodes
-      getJSON(
-        `https://api.weatherbit.io/v2.0/current?lat=${latitude}&lon=${longitude}&key=${APIKey}&include=minutely&units=I`
-      ).then((data) => {
-        const cityData = data.data[0];
-        const tempHTML = `<p class="weather__info--temp">${Math.round(
-          cityData.temp
-        )}<span class="degrees">°F</span></p>`;
-        const weatherIcon = cityData.weather.icon;
-
-        // Display weather type icon
-        weatherIconDisplay.src = `https://www.weatherbit.io/static/img/icons/${weatherIcon}.png`;
-        weatherIconDisplay.addEventListener(
-          'load',
-          () => (weatherIconDisplay.style.opacity = 1)
-        );
-
-        // Inserts tempHTML to the end of the weather info container
-        weatherInfoContainer.insertAdjacentHTML('beforeend', tempHTML);
-
-        // Change background color depending on time of day
-        if (cityData.pod == 'd') {
-          body.classList.remove('night-background');
-          body.classList.add('day-background');
-        } else if (cityData.pod == 'n') {
-          body.classList.remove('day-background');
-          body.classList.add('night-background');
-        }
-
-        // Display data to elements
-        airQualityDisplay.textContent = cityData.aqi;
-        cityDisplay.textContent = cityName;
-        feelsLikeDisplay.textContent = `${Math.round(cityData.app_temp)}°F`;
-        title.textContent = `InstaWeather | ${cityName}, ${stateName}`;
-        typeDisplay.textContent = cityData.weather.description;
-        windInfoDisplay.textContent = `${cityData.wind_cdir} ${Math.round(
-          cityData.wind_spd
-        )} mph`;
-      });
-      // Fetching hourly data
-      getJSON(
+      getWeatherData(
+        `https://api.weatherbit.io/v2.0/current?&city=${cityName},${stateName}&key=${APIKey}&include=minutely&units=I`,
         `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${APIKey2}&units=imperial`
-      ).then((data) => {
-        // Hour for boxes
-        let hour = date.getHours() + 1;
-
-        // Function to decide whether forecast should display AM or PM
-        const futureHours = function (hour) {
-          if (hour > 12) return `${(hour %= 12)} PM`;
-          else if (hour === 0) return `12 AM`;
-          else if (hour === 12) return `${hour} PM`;
-          else return `${hour} AM`;
-        };
-
-        // Iterator for each box
-        let i = 0;
-
-        // Iterating through each box and displaying data for that hour
-        hourlyForecastData.forEach((box) => {
-          // Resetting hour to 0 when it is greater than 23
-          if (hour > 23) hour = 0;
-
-          const hourlyData = data.hourly[i];
-          const icon = hourlyData.weather[0].icon;
-          const description = hourlyData.weather[0].description;
-          let hourlyIcon;
-
-          if (
-            description.includes('scattered') ||
-            description.includes('clear') ||
-            description.includes('few') ||
-            description.includes('broken') ||
-            description.includes('overcast')
-          ) {
-            hourlyIcon = `https://www.weatherbit.io/static/img/icons/c${icon}.png`;
-          } else if (description.includes('rain')) {
-            hourlyIcon = `https://www.weatherbit.io/static/img/icons/r02d.png`;
-          } else if (description.includes('thunderstorm')) {
-            hourlyIcon = `https://www.weatherbit.io/static/img/icons/t04d.png`;
-          } else {
-            hourlyIcon = `http://openweathermap.org/img/wn/${icon}@2x.png`;
-          }
-
-          const hourlyString = `
-            <div class="hourly__forecast--main">
-              <div class="hourly__forecast--date">${futureHours(hour)}</div>
-                <div class="hourly__forecast--icon-temp">
-                  <img src="${hourlyIcon}" alt="Hourly icon" class="hourly__forecast--icon" />
-                  <div class="hourly__forecast--temp">${Math.round(
-                    hourlyData.temp
-                  )}°F</div>
-              </div>
-            </div>
-            <div class="hourly__forecast--type">${toUppercase(
-              description
-            )}</div>
-            <div class="hourly__forecast--humidity">Humidity: ${Math.round(
-              hourlyData.humidity
-            )}%</div>
-            `;
-
-          // Inserting html into each box
-          box.insertAdjacentHTML('afterbegin', hourlyString);
-
-          // Adding 1 to i and hour
-          i++;
-          hour++;
-        });
-      });
+      );
     })
     .catch((err) => {
       renderError(`${err.message}`);
     })
     .finally(() => mainContent.classList.add('view-main'));
 });
+
+// Search navigation toggle
+searchNavBtn.addEventListener('click', () => {
+  search.classList.toggle('search__toggle');
+});
+
+// WHAT DO I DO WITH THIS
