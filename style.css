@@ -21,13 +21,14 @@ body {
 
 /* App container */
 .container {
-  width: 100%;
-  overflow: hidden;
+  /* overflow: hidden; */
+  overflow-y: hidden;
 }
 
 /* Header */
 .header {
   height: 7vh;
+  width: 100vw;
   background-color: rgba(0, 0, 0, 0.65);
   display: flex;
   flex-direction: column;
@@ -49,12 +50,18 @@ body {
   background-color: rgba(0, 0, 0, 0.75);
 }
 
+.main__city-container {
+  height: 100%;
+  width: 100vw;
+}
+
 .main {
   min-height: 83vh;
   opacity: 0;
   transition: 0.4s;
   margin-bottom: 0.5rem;
   width: 100%;
+  display: flex;
 }
 
 .weather__info {
@@ -271,19 +278,33 @@ body {
   cursor: pointer;
 }
 
+.search__city-close--btn {
+  padding: 1rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-right: 1rem;
+  background: transparent;
+  color: white;
+  font-size: 2rem;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
 .search {
   position: fixed;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
-  /* background: rgba(0, 0, 0, 0.9); */
+  background: rgba(0, 0, 0, 0.9);
   transform: translateY(-100%);
   transition: 0.5s linear;
 }
 
 .search-bar__container {
-  margin: 3rem auto 0 auto;
+  margin: 5rem auto 0 auto;
   width: 90%;
   display: flex;
   border-radius: 2rem;
@@ -292,6 +313,10 @@ body {
 
 .search__city-btn {
   padding: 1rem;
+  background: rgb(78, 78, 177);
+  border: 2px solid rgb(78, 78, 177);
+  color: white;
+  font-size: 1.6rem;
 }
 
 .search__city {
@@ -386,4 +411,26 @@ body {
   .weather__info--icon {
     width: 30%;
   }
+}
+
+.toggle-circles__container {
+  padding: 0.8rem;
+  text-align: center;
+}
+
+.toggle-circles {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.toggle-circles__current {
+  font-size: 0.95rem;
+  color: white;
+}
+
+.toggle-circles__circle {
+  font-size: 0.7rem;
+  margin-left: 0.8rem;
+  color: rgb(220, 220, 220);
 }
