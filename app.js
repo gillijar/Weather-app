@@ -19,7 +19,7 @@ let longitude;
 const mainContent = document.querySelector('.main');
 const search = document.querySelector('.search');
 const searchBtn = document.querySelector('.search__city-btn');
-const searchNavBtn = document.querySelector('.header__nav');
+const searchNavBtn = document.querySelectorAll('.open-close__btn');
 let stateName;
 const tempDisplay = document.querySelector('.weather__info--temp');
 const title = document.querySelector('.app__title');
@@ -97,7 +97,7 @@ const getWeatherData = function (url1, url2) {
         <div class="main__24-hour-forecast">
           <div class="hourly__forecast">
             <p class="hourly__forecast--heading">Hourly forecast</p>
-            <div class="hourly__forecast--data-container"></div>
+            <div class="hourly__forecast--data-container" id=${cityName}></div>
           </div>
         </div>
       </div>
@@ -109,7 +109,7 @@ const getWeatherData = function (url1, url2) {
     getJSON(url2).then((data) => {
       console.log(data);
       const hourlyForecastDataContainer = document.querySelector(
-        '.hourly__forecast--data-container'
+        `#${cityName}`
       );
 
       // Hour for boxes
@@ -269,12 +269,21 @@ searchBtn.addEventListener('click', function () {
     .catch((err) => {
       renderError(`${err.message}`);
     })
-    .finally(() => mainContent.classList.add('view-main'));
+    .finally(() => {
+      const circle = `
+      <div class="toggle-circles__circle">
+        <i class="fas fa-circle"></i>
+      </div>`;
+      const toggleCirclesContainer = document.querySelector('.toggle-circles');
+      toggleCirclesContainer.insertAdjacentHTML('beforeend', circle);
+    });
 });
 
 // Search navigation toggle
-searchNavBtn.addEventListener('click', () => {
-  search.classList.toggle('search__toggle');
+searchNavBtn.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    search.classList.toggle('search__toggle');
+  });
 });
 
 // WHAT DO I DO WITH THIS
