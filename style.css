@@ -298,9 +298,10 @@ body {
   left: 0;
   height: 100%;
   width: 100%;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(20, 20, 20, 0.85);
   transform: translateY(-100%);
-  transition: 0.5s linear;
+  transition: 0.35s linear;
+  backdrop-filter: blur(1.5rem);
 }
 
 .search-bar__container {
@@ -313,19 +314,52 @@ body {
 
 .search__city-btn {
   padding: 1rem;
-  background: rgb(78, 78, 177);
-  border: 2px solid rgb(78, 78, 177);
+  background: rgb(64, 169, 255);
+  border: 2px solid rgb(64, 169, 255);
   color: white;
   font-size: 1.6rem;
+  outline: none;
 }
 
 .search__city {
   width: 90%;
   padding: 0.5rem 1rem;
+  border-top-left-radius: 2rem;
+  border-bottom-left-radius: 2rem;
+  font-size: 1.5rem;
+  border: 2px solid white;
+  outline: none;
 }
 
 .search__toggle {
   transform: translateY(0%);
+}
+
+.search__city-tabs {
+  padding: 3rem 2rem 0 2rem;
+}
+
+.search__city-tab {
+  padding: 2rem 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 5px;
+  background-image: linear-gradient(
+    to top right,
+    rgb(172, 217, 255),
+    rgb(64, 169, 255)
+  );
+  font-size: 1.7rem;
+  position: relative;
+  margin-bottom: 1.25rem;
+}
+
+.search__city-tabs--current {
+  position: absolute;
+  top: 0.8rem;
+  left: 1rem;
+  font-size: 0.8rem;
 }
 
 /* Media Queries */
