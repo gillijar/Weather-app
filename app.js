@@ -19,7 +19,10 @@ let longitude;
 const mainContent = document.querySelector('.main');
 const search = document.querySelector('.search');
 const searchBtn = document.querySelector('.search__city-btn');
+const searchCityTab = document.querySelector('.search__city-tabs');
 const searchNavBtn = document.querySelectorAll('.open-close__btn');
+let searchTabCity;
+let searchTabTemp;
 let stateName;
 const tempDisplay = document.querySelector('.weather__info--temp');
 const title = document.querySelector('.app__title');
@@ -29,7 +32,7 @@ const weatherInfoContainer = document.querySelector('.weather__info');
 const windInfoDisplay = document.querySelector('.extra__data--wind-info');
 
 // Get response for each fetch
-const getJSON = function (url) {
+const getJSON = (url) => {
   return fetch(url).then((res) => {
     if (!res.ok) {
       throw new Error(`Something went wrong (${res.status}). Try again!`);
@@ -38,11 +41,16 @@ const getJSON = function (url) {
   });
 };
 
-const getWeatherData = function (url1, url2) {
-  const displayData = function () {
+const cityClass = () => {
+  return !cityName.includes(' ') ? cityName : cityName.split(' ').join('-');
+};
+
+const getWeatherData = (url1, url2) => {
+  const displayData = () => {
     // Get current weather data
     getJSON(url1).then((data) => {
       const cityData = data.data[0];
+      const stateCode = cityData.state_code;
       const weatherIcon = cityData.weather.icon;
 
       // Change background color depending on time of day
@@ -56,7 +64,7 @@ const getWeatherData = function (url1, url2) {
 
       title.textContent = `InstaWeather | ${cityName}, ${stateName}`;
 
-      function insertCurrentWeather() {
+      const insertCurrentWeather = () => {
         const mainHTML = `<div class="main__city-container">
         <div class="main__current-weather">
           <div class="weather__info">
@@ -93,30 +101,49 @@ const getWeatherData = function (url1, url2) {
           </div>
         </div>
 
-        <!-- 5 hour forecast -->
+        <!-- 24 hour forecast -->
         <div class="main__24-hour-forecast">
           <div class="hourly__forecast">
             <p class="hourly__forecast--heading">Hourly forecast</p>
-            <div class="hourly__forecast--data-container" id=${cityName}></div>
+            <div class="hourly__forecast--data-container" id=${cityClass()}></div>
           </div>
         </div>
       </div>
       `;
         mainContent.insertAdjacentHTML('beforeend', mainHTML);
-      }
+      };
       insertCurrentWeather();
+
+      const searchTabHTML = `
+      <div class="search__city-tab">
+        <div class="search__city-tab--city search__city-tab--${cityClass()}"></div>
+        <div class="search__city-tab--temp search__city-tab--${cityClass()}1"></div>
+      </div>`;
+
+      searchCityTab.insertAdjacentHTML('beforeend', searchTabHTML);
+
+      // Current location tab
+      searchTabCity = document.querySelector(
+        `.search__city-tab--${cityClass()}`
+      );
+      searchTabTemp = document.querySelector(
+        `.search__city-tab--${cityClass()}1`
+      );
+
+      searchTabCity.textContent = `${cityName}, ${stateCode}`;
+      searchTabTemp.textContent = `${Math.round(cityData.temp)}°F`;
     });
     getJSON(url2).then((data) => {
       console.log(data);
       const hourlyForecastDataContainer = document.querySelector(
-        `#${cityName}`
+        `#${cityClass()}`
       );
 
       // Hour for boxes
       let hour = date.getHours() + 1;
 
       // Function to decide whether forecast should display AM or PM
-      const futureHours = function (hour) {
+      const futureHours = (hour) => {
         if (hour > 12) return `${(hour %= 12)} PM`;
         else if (hour === 0) return `12 AM`;
         else if (hour === 12) return `${hour} PM`;
@@ -124,7 +151,7 @@ const getWeatherData = function (url1, url2) {
       };
 
       // Iterating through each box and displaying data for that hour
-      for (let i = 0; i < 24; i++) {
+      for (let i = 0; i < 23; i++) {
         // Resetting hour to 0 when it is greater than 23
         if (hour > 23) hour = 0;
 
@@ -185,7 +212,7 @@ const getWeatherData = function (url1, url2) {
 };
 
 // Render error in case of rejected promise
-const renderError = function (msg) {
+const renderError = (msg) => {
   const errorMsg = document.querySelector('.error__msg');
   errorMsg.textContent = msg;
   error.style.opacity = 1;
@@ -193,7 +220,7 @@ const renderError = function (msg) {
 };
 
 // Takes a word or words and makes the first letter of each uppercase
-const toUppercase = function (word) {
+const toUppercase = (word) => {
   return word
     .toLowerCase()
     .split(' ')
@@ -205,7 +232,7 @@ const toUppercase = function (word) {
 errorBtn.addEventListener('click', () => location.reload());
 
 // Date function for header
-const displayDate = (function (date) {
+const displayDate = ((date) => {
   const currentDate = new Intl.DateTimeFormat('en-US', {
     weekday: 'short',
     month: 'long',
@@ -246,23 +273,21 @@ navigator.geolocation.getCurrentPosition((position) => {
 });
 
 // Get searched input location
-searchBtn.addEventListener('click', function () {
-  console.log(input.value.split(',')[0]);
-
+searchBtn.addEventListener('click', () => {
+  const cityInput = input.value.toLowerCase().split(',')[0];
   cityName = input.value.split(',')[0];
-  stateName = input.value.split(',')[1];
+  stateName = input.value.toLowerCase().split(',')[1];
+  console.log(stateName);
 
   // Forward geocoding search input
-  getJSON(`https://geocode.xyz/${cityName},${stateName},USA?json=1`)
+  getJSON(`https://geocode.xyz/${cityInput},${stateName},us?json=1`)
     .then((data) => {
       latitude = data.latt;
       longitude = data.longt;
 
-      // call function here
-
       //   Get weather for current geocodes
       getWeatherData(
-        `https://api.weatherbit.io/v2.0/current?&city=${cityName},${stateName}&key=${APIKey}&include=minutely&units=I`,
+        `https://api.weatherbit.io/v2.0/current?lat=${latitude}&lon=${longitude}&key=${APIKey}&include=minutely&units=I`,
         `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${APIKey2}&units=imperial`
       );
     })
@@ -270,6 +295,7 @@ searchBtn.addEventListener('click', function () {
       renderError(`${err.message}`);
     })
     .finally(() => {
+      // Insert toggle circle
       const circle = `
       <div class="toggle-circles__circle">
         <i class="fas fa-circle"></i>
@@ -277,6 +303,9 @@ searchBtn.addEventListener('click', function () {
       const toggleCirclesContainer = document.querySelector('.toggle-circles');
       toggleCirclesContainer.insertAdjacentHTML('beforeend', circle);
     });
+
+  // Clear input value
+  input.value = '';
 });
 
 // Search navigation toggle
