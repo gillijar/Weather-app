@@ -21,8 +21,7 @@ body {
 
 /* App container */
 .container {
-  /* overflow: hidden; */
-  overflow-y: hidden;
+  overflow: hidden;
 }
 
 /* Header */
@@ -449,7 +448,17 @@ body {
 
 .toggle-circles__container {
   padding: 0.8rem;
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toggle-circles__left {
+  margin-left: 1rem;
+}
+
+.toggle-circles__right {
+  margin-right: 1rem;
 }
 
 .toggle-circles {
