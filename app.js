@@ -17,15 +17,19 @@ const input = document.querySelector('.search__city');
 let latitude;
 let longitude;
 const mainContent = document.querySelector('.main');
+let maxSlide;
 const search = document.querySelector('.search');
 const searchBtn = document.querySelector('.search__city-btn');
 const searchCityTab = document.querySelector('.search__city-tabs');
 const searchNavBtn = document.querySelectorAll('.open-close__btn');
 let searchTabCity;
 let searchTabTemp;
+let slides;
 let stateName;
 const tempDisplay = document.querySelector('.weather__info--temp');
 const title = document.querySelector('.app__title');
+const toggleBtnLeft = document.querySelector('.toggle-circles__left');
+const toggleBtnRight = document.querySelector('.toggle-circles__right');
 const typeDisplay = document.querySelector('.weather__info--type');
 const weatherIconDisplay = document.querySelector('.weather__info--icon');
 const weatherInfoContainer = document.querySelector('.weather__info');
@@ -134,7 +138,6 @@ const getWeatherData = (url1, url2) => {
       searchTabTemp.textContent = `${Math.round(cityData.temp)}°F`;
     });
     getJSON(url2).then((data) => {
-      console.log(data);
       const hourlyForecastDataContainer = document.querySelector(
         `#${cityClass()}`
       );
@@ -206,6 +209,10 @@ const getWeatherData = (url1, url2) => {
         // Adding 1 to hour
         hour++;
       }
+
+      // Setting slides for toggle feature
+      slides = document.querySelectorAll('.main__city-container');
+      maxSlide = slides.length - 1;
     });
   };
   displayData();
@@ -277,7 +284,6 @@ searchBtn.addEventListener('click', () => {
   const cityInput = input.value.toLowerCase().split(',')[0];
   cityName = input.value.split(',')[0];
   stateName = input.value.toLowerCase().split(',')[1];
-  console.log(stateName);
 
   // Forward geocoding search input
   getJSON(`https://geocode.xyz/${cityInput},${stateName},us?json=1`)
@@ -314,5 +320,33 @@ searchNavBtn.forEach((btn) => {
     search.classList.toggle('search__toggle');
   });
 });
+
+// Switch slides feature
+let curSlide = 0;
+
+// Next Slide
+const nextSlide = function () {
+  if (curSlide === maxSlide) {
+    curSlide = 0;
+    mainContent.style.transform = `translateX(0%)`;
+  } else {
+    curSlide++;
+    mainContent.style.transform = `translateX(-${100 * curSlide}%)`;
+  }
+};
+
+// Previous Slide
+const prevSlide = function () {
+  if (curSlide === 0) {
+    curSlide = maxSlide;
+    mainContent.style.transform = `translateX(-${100 * maxSlide}%)`;
+  } else {
+    curSlide--;
+    mainContent.style.transform = `translateX(-${100 * curSlide}%)`;
+  }
+};
+
+toggleBtnRight.addEventListener('click', nextSlide);
+toggleBtnLeft.addEventListener('click', prevSlide);
 
 // WHAT DO I DO WITH THIS
