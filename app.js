@@ -5,8 +5,10 @@ const airQualityDisplay = document.querySelector('.extra__data--aqi');
 const APIKey = '135a94105a0042b5a55fb5628dcfb302';
 const APIKey2 = 'a33df676f47b9be9a8072c268d067eb3';
 const body = document.querySelector('body');
+let circleNum = 0;
 const cityDisplay = document.querySelector('.weather__info--city');
 let cityName;
+let curCircle;
 const date = new Date();
 const dateDisplay = document.querySelector('.date');
 const error = document.querySelector('.error');
@@ -30,6 +32,7 @@ const tempDisplay = document.querySelector('.weather__info--temp');
 const title = document.querySelector('.app__title');
 const toggleBtnLeft = document.querySelector('.toggle-circles__left');
 const toggleBtnRight = document.querySelector('.toggle-circles__right');
+let toggleCircles;
 const typeDisplay = document.querySelector('.weather__info--type');
 const weatherIconDisplay = document.querySelector('.weather__info--icon');
 const weatherInfoContainer = document.querySelector('.weather__info');
@@ -213,6 +216,9 @@ const getWeatherData = (url1, url2) => {
       // Setting slides for toggle feature
       slides = document.querySelectorAll('.main__city-container');
       maxSlide = slides.length - 1;
+
+      // Selecting toggle circle each time a new city is added
+      toggleCircles = document.querySelectorAll('.toggle-circles__circle');
     });
   };
   displayData();
@@ -233,6 +239,16 @@ const toUppercase = (word) => {
     .split(' ')
     .map((name) => name[0].toUpperCase() + name.slice(1))
     .join(' ');
+};
+
+// Function to change the circle when user changes slide
+const changeCircle = () => {
+  toggleCircles.forEach((circle) => {
+    circle.classList.remove('circle-selected');
+  });
+
+  curCircle = document.querySelector(`.toggle-circles__circle-${curSlide}`);
+  curCircle.classList.add('circle-selected');
 };
 
 // Button to reload page in case of an error
@@ -303,11 +319,14 @@ searchBtn.addEventListener('click', () => {
     .finally(() => {
       // Insert toggle circle
       const circle = `
-      <div class="toggle-circles__circle">
+      <div class="toggle-circles__circle toggle-circles__circle-${
+        1 + circleNum
+      }">
         <i class="fas fa-circle"></i>
       </div>`;
       const toggleCirclesContainer = document.querySelector('.toggle-circles');
       toggleCirclesContainer.insertAdjacentHTML('beforeend', circle);
+      circleNum += 1;
     });
 
   // Clear input value
@@ -333,6 +352,9 @@ const nextSlide = function () {
     curSlide++;
     mainContent.style.transform = `translateX(-${100 * curSlide}%)`;
   }
+
+  // Change circle to current slide
+  changeCircle();
 };
 
 // Previous Slide
@@ -344,6 +366,9 @@ const prevSlide = function () {
     curSlide--;
     mainContent.style.transform = `translateX(-${100 * curSlide}%)`;
   }
+
+  // Change circle to current slide
+  changeCircle();
 };
 
 toggleBtnRight.addEventListener('click', nextSlide);

@@ -467,13 +467,17 @@ body {
   align-items: center;
 }
 
-.toggle-circles__current {
+#toggle-circles__current {
   font-size: 0.95rem;
-  color: white;
 }
 
 .toggle-circles__circle {
   font-size: 0.7rem;
   margin-left: 0.8rem;
-  color: rgb(220, 220, 220);
+  color: rgb(200, 200, 200);
+}
+
+/* Toggle circles class list */
+.circle-selected {
+  color: white;
 }
