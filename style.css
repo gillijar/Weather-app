@@ -354,6 +354,14 @@ body {
   margin-bottom: 1.25rem;
 }
 
+.search__city-tab--city {
+  pointer-events: none;
+}
+
+.search__city-tab--temp {
+  pointer-events: none;
+}
+
 .search__city-tabs--current {
   position: absolute;
   top: 0.8rem;

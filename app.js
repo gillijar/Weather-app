@@ -15,6 +15,7 @@ const error = document.querySelector('.error');
 const errorBtn = document.querySelector('.error__btn');
 const feelsLikeDisplay = document.querySelector('.extra__data--feels-like');
 const hourlyForecastData = document.querySelectorAll('.hourly__forecast--data');
+let individualTab;
 const input = document.querySelector('.search__city');
 let latitude;
 let longitude;
@@ -50,6 +51,22 @@ const getJSON = (url) => {
 
 const cityClass = () => {
   return !cityName.includes(' ') ? cityName : cityName.split(' ').join('-');
+};
+
+// Function for city tab to select a specific city
+const cityTabSelect = () => {
+  individualTab.forEach((tab, i) => {
+    tab.addEventListener('click', () => {
+      // Translate main element
+      mainContent.style.transform = `translateX(-${100 * i}%)`;
+      // Set current slide equal to i so it doesn't mess up the right/left buttons
+      curSlide = i;
+      // Change circle to current position of selected city
+      changeCircle();
+      // Close nav bar
+      search.classList.remove('search__toggle');
+    });
+  });
 };
 
 const getWeatherData = (url1, url2) => {
@@ -139,6 +156,9 @@ const getWeatherData = (url1, url2) => {
 
       searchTabCity.textContent = `${cityName}, ${stateCode}`;
       searchTabTemp.textContent = `${Math.round(cityData.temp)}°F`;
+
+      individualTab = document.querySelectorAll('.search__city-tab');
+      cityTabSelect();
     });
     getJSON(url2).then((data) => {
       const hourlyForecastDataContainer = document.querySelector(
