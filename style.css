@@ -294,7 +294,7 @@ body {
 .search {
   position: fixed;
   top: 0;
-  left: 0;
+  right: 0;
   height: 100%;
   width: 100%;
   background: rgba(20, 20, 20, 0.85);
@@ -318,6 +318,7 @@ body {
   color: white;
   font-size: 1.6rem;
   outline: none;
+  cursor: pointer;
 }
 
 .search__city {
@@ -335,7 +336,10 @@ body {
 }
 
 .search__city-tabs {
-  padding: 3rem 2rem 0 2rem;
+  margin-top: 3rem;
+  padding: 0 2rem 0 2rem;
+  max-height: 80vh;
+  overflow: scroll;
 }
 
 .search__city-tab {
@@ -352,6 +356,7 @@ body {
   font-size: 1.7rem;
   position: relative;
   margin-bottom: 1.25rem;
+  cursor: pointer;
 }
 
 .search__city-tab--city {
@@ -376,8 +381,21 @@ body {
     align-items: flex-start;
   }
 
+  .search {
+    width: 35vw;
+  }
+
+  .search__city-tabs {
+    max-height: 75vh;
+  }
+
   .weather__info--icon {
     width: 40%;
+  }
+
+  .main__city-container {
+    display: flex;
+    min-width: 100vw;
   }
 
   .main__current-weather {
@@ -390,7 +408,6 @@ body {
   .main__24-hour-forecast {
     margin-top: 0.5rem;
     max-height: 83vh;
-    border-left: 1px solid rgba(255, 255, 255, 0.2);
     overflow: scroll;
   }
 
@@ -463,10 +480,12 @@ body {
 
 .toggle-circles__left {
   margin-left: 1rem;
+  cursor: pointer;
 }
 
 .toggle-circles__right {
   margin-right: 1rem;
+  cursor: pointer;
 }
 
 .toggle-circles {
@@ -482,7 +501,7 @@ body {
 .toggle-circles__circle {
   font-size: 0.7rem;
   margin-left: 0.8rem;
-  color: rgb(200, 200, 200);
+  color: rgb(226, 226, 226);
 }
 
 /* Toggle circles class list */
