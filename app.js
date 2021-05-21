@@ -86,7 +86,7 @@ const getWeatherData = (url1, url2) => {
         body.classList.add('night-background');
       }
 
-      title.textContent = `InstaWeather | ${cityName}, ${stateName}`;
+      title.textContent = `InstaWeather | ${cityName}, ${stateCode}`;
 
       const insertCurrentWeather = () => {
         const mainHTML = `<div class="main__city-container">
