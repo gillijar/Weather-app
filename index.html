@@ -15,12 +15,6 @@
     <!-- JavaScript -->
     <script defer src="app.js"></script>
 
-    <!-- Google maps API -->
-    <script
-      async
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnLrO4H_GVRxEXQed8sC2Mx0MSjVovZ64&libraries=places&callback=activatePlacesSearch"
-    ></script>
-
     <!-- Font awesome cdn -->
     <link
       rel="stylesheet"
@@ -58,7 +52,10 @@
         </div>
         <div class="toggle-circles">
           <div
-            class="toggle-circles__circle toggle-circles__circle-0 circle-selected"
+            class="
+              toggle-circles__circle toggle-circles__circle-0
+              circle-selected
+            "
             id="toggle-circles__current"
           >
             <i class="fas fa-location-arrow"></i>
@@ -87,7 +84,11 @@
     <!-- Search bar -->
     <nav class="search">
       <div class="search-bar__container">
-        <input type="text" class="search__city" />
+        <input
+          type="text"
+          class="search__city"
+          placeholder="Ex. Los Angeles, CA"
+        />
         <button class="search__city-btn">
           <i class="fas fa-search"></i>
         </button>

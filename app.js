@@ -4,6 +4,7 @@
 const airQualityDisplay = document.querySelector('.extra__data--aqi');
 const APIKey = '135a94105a0042b5a55fb5628dcfb302';
 const APIKey2 = 'a33df676f47b9be9a8072c268d067eb3';
+const geoCodeAPI = 'd7b29b0beca3414b8077890453efd605';
 const body = document.querySelector('body');
 let circleNum = 0;
 const cityDisplay = document.querySelector('.weather__info--city');
@@ -40,13 +41,9 @@ const weatherInfoContainer = document.querySelector('.weather__info');
 const windInfoDisplay = document.querySelector('.extra__data--wind-info');
 
 // Get response for each fetch
-const getJSON = (url) => {
-  return fetch(url).then((res) => {
-    if (!res.ok) {
-      throw new Error(`Something went wrong (${res.status}). Try again!`);
-    }
-    return res.json();
-  });
+const getJSON = async (url) => {
+  const response = await fetch(url);
+  return response.json();
 };
 
 const cityClass = () => {
@@ -70,9 +67,10 @@ const cityTabSelect = () => {
 };
 
 const getWeatherData = (url1, url2) => {
-  const displayData = () => {
+  const displayData = async () => {
     // Get current weather data
-    getJSON(url1).then((data) => {
+    try {
+      const data = await getJSON(url1);
       const cityData = data.data[0];
       const stateCode = cityData.state_code;
       const weatherIcon = cityData.weather.icon;
@@ -90,59 +88,59 @@ const getWeatherData = (url1, url2) => {
 
       const insertCurrentWeather = () => {
         const mainHTML = `<div class="main__city-container">
-        <div class="main__current-weather">
-          <div class="weather__info">
-            <!-- Weather type icon -->
-            <img src="${`https://www.weatherbit.io/static/img/icons/${weatherIcon}.png`}" alt="Weather icon" class="weather__info--icon" />
-            <!-- City -->
-            <div class="weather__info--city-and-type">
-            <h2 class="weather__info--city">${cityName}</h2>
-            <p class="weather__info--type">${cityData.weather.description}</p>
+          <div class="main__current-weather">
+            <div class="weather__info">
+              <!-- Weather type icon -->
+              <img src="${`https://www.weatherbit.io/static/img/icons/${weatherIcon}.png`}" alt="Weather icon" class="weather__info--icon" />
+              <!-- City -->
+              <div class="weather__info--city-and-type">
+              <h2 class="weather__info--city">${cityName}</h2>
+              <p class="weather__info--type">${cityData.weather.description}</p>
+              </div>
+              <p class="weather__info--temp">${Math.round(
+                cityData.temp
+              )}<span class="degrees">°F</span></p>
             </div>
-            <p class="weather__info--temp">${Math.round(
-              cityData.temp
-            )}<span class="degrees">°F</span></p>
+  
+            <!-- Extra data for the location -->
+            <div class="extra__data">
+              <div class="extra__data--info">
+                <p class="extra__data--heading">Wind</p>
+                <p class="extra__data--wind-info">${
+                  cityData.wind_cdir
+                } ${Math.round(cityData.wind_spd)} mph</p>
+              </div>
+              <div class="extra__data--info">
+                <p class="extra__data--heading">Feels like</p>
+                <p class="extra__data--feels-like">${`${Math.round(
+                  cityData.app_temp
+                )}°F`}</p>
+              </div>
+              <div class="extra__data--info">
+                <p class="extra__data--heading">aqi</p>
+                <p class="extra__data--aqi">${cityData.aqi}</p>
+              </div>
+            </div>
           </div>
-
-          <!-- Extra data for the location -->
-          <div class="extra__data">
-            <div class="extra__data--info">
-              <p class="extra__data--heading">Wind</p>
-              <p class="extra__data--wind-info">${
-                cityData.wind_cdir
-              } ${Math.round(cityData.wind_spd)} mph</p>
-            </div>
-            <div class="extra__data--info">
-              <p class="extra__data--heading">Feels like</p>
-              <p class="extra__data--feels-like">${`${Math.round(
-                cityData.app_temp
-              )}°F`}</p>
-            </div>
-            <div class="extra__data--info">
-              <p class="extra__data--heading">aqi</p>
-              <p class="extra__data--aqi">${cityData.aqi}</p>
+  
+          <!-- 24 hour forecast -->
+          <div class="main__24-hour-forecast">
+            <div class="hourly__forecast">
+              <p class="hourly__forecast--heading">Hourly forecast</p>
+              <div class="hourly__forecast--data-container" id=${cityClass()}></div>
             </div>
           </div>
         </div>
-
-        <!-- 24 hour forecast -->
-        <div class="main__24-hour-forecast">
-          <div class="hourly__forecast">
-            <p class="hourly__forecast--heading">Hourly forecast</p>
-            <div class="hourly__forecast--data-container" id=${cityClass()}></div>
-          </div>
-        </div>
-      </div>
-      `;
+        `;
         mainContent.insertAdjacentHTML('beforeend', mainHTML);
       };
       insertCurrentWeather();
 
       const searchTabHTML = `
-      <div class="search__city-tab">
-        <div class="search__city-tab--city search__city-tab--${cityClass()}"></div>
-        <div class="search__city-tab--temp search__city-tab--${cityClass()}1"></div>
-      </div>`;
+        <div class="search__city-tab">
+          <div class="search__city-tab--city search__city-tab--${cityClass()}"></div>
+          <div class="search__city-tab--temp search__city-tab--${cityClass()}1"></div>
+        </div>`;
 
       searchCityTab.insertAdjacentHTML('beforeend', searchTabHTML);
 
@@ -159,7 +157,10 @@ const getWeatherData = (url1, url2) => {
 
       individualTab = document.querySelectorAll('.search__city-tab');
       cityTabSelect();
-    });
+    } catch (err) {
+      console.log('something happened');
+    }
+
     getJSON(url2).then((data) => {
       const hourlyForecastDataContainer = document.querySelector(
         `#${cityClass()}`
@@ -297,10 +298,13 @@ navigator.geolocation.getCurrentPosition((position) => {
   longitude = position.coords.longitude;
 
   // Get city info from geocode reverse geocode API
-  getJSON(`https://geocode.xyz/${latitude},${longitude}?geoit=json`)
+  getJSON(
+    `https://api.geoapify.com/v1/geocode/reverse?lat=${latitude}&lon=${longitude}&apiKey=${geoCodeAPI}`
+  )
     .then((data) => {
-      cityName = toUppercase(data.city);
-      stateName = data.statename;
+      const cityData = data.features[0].properties;
+      cityName = toUppercase(cityData.city);
+      stateName = cityData.statename;
 
       getWeatherData(
         `https://api.weatherbit.io/v2.0/current?lat=${latitude}&lon=${longitude}&key=${APIKey}&include=minutely&units=I`,
@@ -322,10 +326,13 @@ searchBtn.addEventListener('click', () => {
   stateName = input.value.toLowerCase().split(',')[1];
 
   // Forward geocoding search input
-  getJSON(`https://geocode.xyz/${cityInput},${stateName},us?json=1`)
+  getJSON(
+    `https://api.geoapify.com/v1/geocode/search?text=${cityName}%20${stateName}&apiKey=${geoCodeAPI}`
+  )
     .then((data) => {
-      latitude = data.latt;
-      longitude = data.longt;
+      const searchData = data.features[0].geometry.coordinates;
+      latitude = searchData[1];
+      longitude = searchData[0];
 
       //   Get weather for current geocodes
       getWeatherData(
